@@ -1,0 +1,19 @@
+﻿@model BloodConnect.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h2>My Profile</h2>
+
+<table class="table">
+    <tr><th>Name:</th><td>@Model.FullName</td></tr>
+    <tr><th>Email:</th><td>@Model.Email</td></tr>
+    <tr><th>Phone:</th><td>@Model.PhoneNumber</td></tr>
+    <tr><th>Department:</th><td>@Model.Department</td></tr>
+    <tr><th>Session:</th><td>@Model.Session</td></tr>
+    <tr><th>Blood Group:</th><td>@Model.BloodGroup</td></tr>
+    <tr><th>Available to Donate:</th><td>@(Model.IsAvailable ? "Yes" : "No")</td></tr>
+</table>
+
+<a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
