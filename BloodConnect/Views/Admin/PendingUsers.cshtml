@@ -1,0 +1,35 @@
+﻿@model List<BloodConnect.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Pending Users";
+}
+
+<h2>Pending Users for Approval</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Student ID</th>
+            <th>Department</th>
+            <th>Session</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.StudentId</td>
+                <td>@user.Department</td>
+                <td>@user.Session</td>
+                <td>
+                    <a class="btn btn-success" asp-action="Approve" asp-route-id="@user.Id">Approve</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
