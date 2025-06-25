@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodConnect", "BloodConnect\BloodConnect.csproj", "{FC91EAAE-6A44-4CFD-8E06-86B1E5DE1C23}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC91EAAE-6A44-4CFD-8E06-86B1E5DE1C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC91EAAE-6A44-4CFD-8E06-86B1E5DE1C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC91EAAE-6A44-4CFD-8E06-86B1E5DE1C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC91EAAE-6A44-4CFD-8E06-86B1E5DE1C23}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {67E36D69-8B60-4157-B8B6-E3482E136B39}
+	EndGlobalSection
+EndGlobal
