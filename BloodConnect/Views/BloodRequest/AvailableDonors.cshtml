@@ -1,0 +1,33 @@
+﻿@model List<BloodConnect.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Available Donors";
+}
+
+<h2>Available Donors</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Blood Group</th>
+            <th>Department</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var donor in Model)
+        {
+            <tr>
+                <td>@donor.FullName</td>
+                <td>@donor.BloodGroup</td>
+                <td>@donor.Department</td>
+                <td>@donor.PhoneNumber</td>
+                <td>
+                    <a asp-action="RequestBlood" asp-route-donorId="@donor.Id" class="btn btn-danger">Request Blood</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

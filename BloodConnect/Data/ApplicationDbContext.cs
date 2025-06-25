@@ -10,6 +10,23 @@ namespace BloodConnect.Data
             : base(options)
         {
         }
+        public DbSet<BloodRequest> BloodRequests { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<BloodRequest>()
+                .HasOne(br => br.Donor)
+                .WithMany()
+                .HasForeignKey(br => br.DonorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BloodRequest>()
+                .HasOne(br => br.Requestor)
+                .WithMany()
+                .HasForeignKey(br => br.RequestorId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

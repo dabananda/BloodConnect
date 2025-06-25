@@ -1,0 +1,34 @@
+﻿@model List<BloodConnect.Models.BloodRequest>
+
+@{
+    ViewData["Title"] = "My Sent Requests";
+}
+
+<h2>My Sent Requests</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Donor Name</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.Donor.FullName</td>
+                <td>@request.Status</td>
+                <td>@request.RequestDate.ToShortDateString()</td>
+                <td>
+                    @if (request.Status == BloodConnect.Models.RequestStatus.Accepted)
+                    {
+                        <a asp-action="MarkAsCompleted" asp-route-id="@request.Id" class="btn btn-success">Mark as Completed</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

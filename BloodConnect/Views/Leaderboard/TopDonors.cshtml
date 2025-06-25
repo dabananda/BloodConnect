@@ -1,0 +1,55 @@
+﻿@model List<BloodConnect.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Top Donors Leaderboard";
+}
+
+<h2>Top 10 Donors</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Points</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var rank = 1;
+            foreach (var donor in Model)
+            {
+                string title = "";
+                string badgeClass = "";
+
+                if (rank == 1)
+                {
+                    title = "Gold Donor 🥇";
+                    badgeClass = "text-warning";
+                }
+                else if (rank == 2)
+                {
+                    title = "Silver Donor 🥈";
+                    badgeClass = "text-secondary";
+                }
+                else if (rank == 3)
+                {
+                    title = "Bronze Donor 🥉";
+                    badgeClass = "text-danger";
+                }
+                else
+                {
+                    title = "-";
+                }
+                <tr>
+                    <td>@rank</td>
+                    <td>@donor.FullName</td>
+                    <td>@donor.TotalPoints</td>
+                    <td class="@badgeClass">@title</td>
+                </tr>
+                rank++;
+            }
+        }
+    </tbody>
+</table>

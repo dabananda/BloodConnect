@@ -1,0 +1,41 @@
+﻿@model List<BloodConnect.Models.BloodRequest>
+
+@{
+    ViewData["Title"] = "Requests Received (As Donor)";
+}
+
+<h2>Requests Received</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Requestor Name</th>
+            <th>Blood Group</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.Requestor.FullName</td>
+                <td>@request.Requestor.BloodGroup</td>
+                <td>@request.Status</td>
+                <td>@request.RequestDate.ToShortDateString()</td>
+                <td>
+                    @if (request.Status == BloodConnect.Models.RequestStatus.Pending)
+                    {
+                        <a asp-action="Accept" asp-route-id="@request.Id" class="btn btn-success btn-sm">Accept</a>
+                        <a asp-action="Decline" asp-route-id="@request.Id" class="btn btn-danger btn-sm">Decline</a>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
