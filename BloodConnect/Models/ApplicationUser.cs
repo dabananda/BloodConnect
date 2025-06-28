@@ -13,6 +13,8 @@ namespace BloodConnect.Models
         public bool IsAvailable { get; set; }
         public int TotalPoints { get; set; }
         public bool IsApprovedByAdmin { get; set; }
+        public bool IsSuspended { get; set; } = false;
         public DateTime RegisteredAt { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

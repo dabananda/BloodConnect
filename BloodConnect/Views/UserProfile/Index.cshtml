@@ -4,16 +4,98 @@
     ViewData["Title"] = "My Profile";
 }
 
-<h2>My Profile</h2>
+<div class="container mt-5">
+    <!-- Profile Header -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-danger">👤 My Profile</h2>
+        <p class="text-muted">Manage your blood donor profile and stay connected with the campus community.</p>
+    </div>
 
-<table class="table">
-    <tr><th>Name:</th><td>@Model.FullName</td></tr>
-    <tr><th>Email:</th><td>@Model.Email</td></tr>
-    <tr><th>Phone:</th><td>@Model.PhoneNumber</td></tr>
-    <tr><th>Department:</th><td>@Model.Department</td></tr>
-    <tr><th>Session:</th><td>@Model.Session</td></tr>
-    <tr><th>Blood Group:</th><td>@Model.BloodGroup</td></tr>
-    <tr><th>Available to Donate:</th><td>@(Model.IsAvailable ? "Yes" : "No")</td></tr>
-</table>
+    <!-- Profile Card -->
+    <div class="card shadow-lg border-0">
+        <div class="row g-0">
 
-<a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
+            <!-- Left: Profile Image -->
+            <div class="col-md-4 text-center bg-danger text-white d-flex flex-column justify-content-center align-items-center p-4 rounded-start">
+                @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+                {
+                    <img src="@Model.ProfilePictureUrl" alt="Profile Picture"
+                         class="rounded-circle img-thumbnail mb-3 shadow"
+                         style="width: 150px; height: 150px; object-fit: cover;" />
+                }
+                else
+                {
+                    <img src="https://via.placeholder.com/150?text=No+Image" alt="No Profile Pic"
+                         class="rounded-circle img-thumbnail mb-3 shadow"
+                         style="width: 150px; height: 150px; object-fit: cover;" />
+                }
+            </div>
+
+            <!-- Right: Profile Info -->
+            <div class="col-md-8">
+                <div class="card-body p-4">
+
+                    <h4 class="text-danger fw-bold">@Model.FullName</h4>
+                    <hr class="mb-3">
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Student ID:</div>
+                        <div class="col-sm-8">@Model.StudentId</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Department:</div>
+                        <div class="col-sm-8">@Model.Department</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Session:</div>
+                        <div class="col-sm-8">@Model.Session</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Phone:</div>
+                        <div class="col-sm-8">@Model.PhoneNumber</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Blood Group:</div>
+                        <div class="col-sm-8"><span class="badge bg-danger fs-6">@Model.BloodGroup</span></div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Last Donation:</div>
+                        <div class="col-sm-8">@(Model.LastDonationDate?.ToString("dd MMM yyyy") ?? "N/A")</div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Availability:</div>
+                        <div class="col-sm-8">
+                            @if (Model.IsAvailable)
+                            {
+                                <span class="badge bg-success">Available</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Not Available</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-sm-4 fw-semibold">Total Points:</div>
+                        <div class="col-sm-8 text-danger fw-bold">@Model.TotalPoints</div>
+                    </div>
+
+                    <!-- Optional Extra Actions -->
+                    <div class="mt-3">
+                        <a asp-action="Edit" class="btn btn-danger me-2">Edit Profile</a>
+                        <a asp-action="Dashboard" class="btn btn-outline-secondary">Go to Dashboard</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

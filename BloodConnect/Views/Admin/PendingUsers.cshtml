@@ -1,19 +1,13 @@
-﻿@model List<BloodConnect.Models.ApplicationUser>
+﻿@model List<ApplicationUser>
 
-@{
-    ViewData["Title"] = "Pending Users";
-}
+<h3>Pending Users</h3>
 
-<h2>Pending Users for Approval</h2>
-
-<table class="table table-striped">
-    <thead>
+<table class="table table-striped table-bordered">
+    <thead class="table-warning">
         <tr>
-            <th>Full Name</th>
+            <th>Name</th>
             <th>Email</th>
             <th>Student ID</th>
-            <th>Department</th>
-            <th>Session</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -24,10 +18,11 @@
                 <td>@user.FullName</td>
                 <td>@user.Email</td>
                 <td>@user.StudentId</td>
-                <td>@user.Department</td>
-                <td>@user.Session</td>
                 <td>
-                    <a class="btn btn-success" asp-action="Approve" asp-route-id="@user.Id">Approve</a>
+                    <form asp-action="ApproveUser" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                    </form>
                 </td>
             </tr>
         }

@@ -1,0 +1,14 @@
+﻿@model IFormFile
+@{
+    ViewData["Title"] = "Upload Profile Picture";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger mb-3">Upload Profile Picture</h2>
+    <form asp-action="UploadProfilePicture" enctype="multipart/form-data" method="post">
+        <div class="mb-3">
+            <input type="file" name="file" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-danger">Upload</button>
+    </form>
+</div>

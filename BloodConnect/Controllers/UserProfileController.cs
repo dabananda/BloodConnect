@@ -1,20 +1,25 @@
 ﻿using BloodConnect.Data;
 using BloodConnect.Models;
+using BloodConnect.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace BloodConnect.Controllers
 {
+    [Authorize]
     public class UserProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly CloudinaryService _cloudinaryService;
 
-        public UserProfileController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public UserProfileController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, CloudinaryService cloudinaryService)
         {
             _userManager = userManager;
             _context = context;
+            _cloudinaryService = cloudinaryService;
         }
 
         // View Profile
@@ -31,10 +36,10 @@ namespace BloodConnect.Controllers
             return View(user);
         }
 
-        // POST: Save Profile Changes
+        // POST: Save Profile Changes + Profile Picture
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ApplicationUser model)
+        public async Task<IActionResult> Edit(ApplicationUser model, IFormFile ProfilePictureFile)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user != null)
@@ -45,9 +50,25 @@ namespace BloodConnect.Controllers
                 user.Session = model.Session;
                 user.BloodGroup = model.BloodGroup;
 
+                // Handle profile picture upload
+                if (ProfilePictureFile != null && ProfilePictureFile.Length > 0)
+                {
+                    var imageUrl = await _cloudinaryService.UploadImageAsync(ProfilePictureFile);
+                    if (imageUrl != null)
+                    {
+                        user.ProfilePictureUrl = imageUrl;
+                        TempData["SuccessMessage"] = "Profile picture updated successfully!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Failed to upload profile picture.";
+                    }
+                }
+
                 await _userManager.UpdateAsync(user);
                 return RedirectToAction(nameof(Index));
             }
+
             return View(model);
         }
     }

@@ -4,38 +4,71 @@
     ViewData["Title"] = "Requests Received (As Donor)";
 }
 
-<h2>Requests Received</h2>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-9">
+            <h2 class="text-danger mb-4">📥 Requests Received</h2>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Requestor Name</th>
-            <th>Blood Group</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var request in Model)
-        {
-            <tr>
-                <td>@request.Requestor.FullName</td>
-                <td>@request.Requestor.BloodGroup</td>
-                <td>@request.Status</td>
-                <td>@request.RequestDate.ToShortDateString()</td>
-                <td>
-                    @if (request.Status == BloodConnect.Models.RequestStatus.Pending)
-                    {
-                        <a asp-action="Accept" asp-route-id="@request.Id" class="btn btn-success btn-sm">Accept</a>
-                        <a asp-action="Decline" asp-route-id="@request.Id" class="btn btn-danger btn-sm">Decline</a>
-                    }
-                    else
-                    {
-                        <span>-</span>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            @if (Model.Any())
+            {
+                <table class="table table-hover table-striped">
+                    <thead class="table-danger text-white">
+                        <tr>
+                            <th>Requestor Name</th>
+                            <th>Blood Group</th>
+                            <th>Status</th>
+                            <th>Request Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>@request.Requestor.FullName</td>
+                                <td><span class="badge bg-danger">@request.Requestor.BloodGroup</span></td>
+                                <td>
+                                    @switch (request.Status)
+                                    {
+                                        case BloodConnect.Models.RequestStatus.Pending:
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                            break;
+                                        case BloodConnect.Models.RequestStatus.Accepted:
+                                            <span class="badge bg-success">Accepted</span>
+                                            break;
+                                        case BloodConnect.Models.RequestStatus.Completed:
+                                            <span class="badge bg-primary">Completed</span>
+                                            break;
+                                        case BloodConnect.Models.RequestStatus.Declined:
+                                            <span class="badge bg-secondary">Declined</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>@request.RequestDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (request.Status == BloodConnect.Models.RequestStatus.Pending)
+                                    {
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Accept" asp-route-id="@request.Id" class="btn btn-success btn-sm">✅ Accept</a>
+                                            <a asp-action="Decline" asp-route-id="@request.Id" class="btn btn-danger btn-sm">❌ Decline</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    You have not received any blood requests yet.
+                </div>
+            }
+        </div>
+    </div>
+</div>

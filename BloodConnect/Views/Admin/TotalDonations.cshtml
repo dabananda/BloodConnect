@@ -1,0 +1,25 @@
+﻿@model List<ApplicationUser>
+
+<h3>Total Donations (by User)</h3>
+
+<table class="table table-striped table-hover">
+    <thead class="table-danger text-white">
+        <tr>
+            <th>Name</th>
+            <th>Blood Group</th>
+            <th>Total Points</th>
+            <th>Last Donation Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.BloodGroup</td>
+                <td>@user.TotalPoints</td>
+                <td>@(user.LastDonationDate?.ToString("dd MMM yyyy") ?? "N/A")</td>
+            </tr>
+        }
+    </tbody>
+</table>

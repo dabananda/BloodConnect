@@ -1,0 +1,25 @@
+﻿@model List<ApplicationUser>
+
+<h3>All Registered Users</h3>
+
+<table class="table table-striped table-hover">
+    <thead class="table-success">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Blood Group</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.BloodGroup</td>
+                <td>@(user.IsApprovedByAdmin ? "Approved" : "Pending")</td>
+            </tr>
+        }
+    </tbody>
+</table>

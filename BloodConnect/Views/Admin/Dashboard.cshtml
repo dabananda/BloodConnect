@@ -1,0 +1,134 @@
+﻿@model BloodConnect.Models.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <h2 class="text-danger mb-4">🛡️ Admin Dashboard</h2>
+
+    <!-- Statistics Cards -->
+    <div class="row g-3 mb-5">
+
+        <!-- Pending Users Card -->
+        <div class="col-md-3">
+            <a asp-action="PendingUsers" class="text-decoration-none">
+                <div class="card text-white bg-warning shadow hover-shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Pending Users</h5>
+                        <h3>@Model.PendingUsers</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Donations Card -->
+        <div class="col-md-3">
+            <a asp-action="TotalDonations" class="text-decoration-none">
+                <div class="card text-white bg-danger shadow hover-shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Donations</h5>
+                        <h3>@Model.TotalDonations</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Requests Card -->
+        <div class="col-md-3">
+            <a asp-action="TotalRequests" class="text-decoration-none">
+                <div class="card text-white bg-primary shadow hover-shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Requests</h5>
+                        <h3>@Model.TotalRequests</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Users Card -->
+        <div class="col-md-3">
+            <a asp-action="TotalUsers" class="text-decoration-none">
+                <div class="card text-white bg-success shadow hover-shadow">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Users</h5>
+                        <h3>@Model.TotalUsers</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Donation Dates and Average -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h6>Last Donation Date:</h6>
+                    <p>@(Model.LastDonationDate?.ToString("dd MMM yyyy") ?? "N/A")</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h6>First Donation Date:</h6>
+                    <p>@(Model.FirstDonationDate?.ToString("dd MMM yyyy") ?? "N/A")</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h6>Average Donations per Month:</h6>
+                    <p>@Model.AvgDonationsPerMonth.ToString("F2")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suspended Users Section -->
+    <div class="card shadow mb-5">
+        <div class="card-header bg-danger text-white">
+            Suspended Users
+        </div>
+        <div class="card-body">
+            @if (Model.SuspendedUsers.Any())
+            {
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Blood Group</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.SuspendedUsers)
+                        {
+                            <tr>
+                                <td>@user.FullName</td>
+                                <td>@user.Email</td>
+                                <td>@user.BloodGroup</td>
+                                <td>
+                                    <form asp-action="ToggleSuspend" method="post">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">Unsuspend</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No suspended users.</p>
+            }
+        </div>
+    </div>
+</div>

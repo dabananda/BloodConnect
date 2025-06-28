@@ -4,52 +4,59 @@
     ViewData["Title"] = "Top Donors Leaderboard";
 }
 
-<h2>Top 10 Donors</h2>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+            <h2 class="text-danger mb-4">🏆 Top 10 Blood Donors Leaderboard</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Points</th>
-            <th>Title</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var rank = 1;
-            foreach (var donor in Model)
-            {
-                string title = "";
-                string badgeClass = "";
+            <table class="table table-hover table-striped text-center shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Donor Name</th>
+                        <th>Total Points</th>
+                        <th>Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var rank = 1;
+                        foreach (var donor in Model)
+                        {
+                            string title = "";
+                            string rowClass = "";
 
-                if (rank == 1)
-                {
-                    title = "Gold Donor 🥇";
-                    badgeClass = "text-warning";
-                }
-                else if (rank == 2)
-                {
-                    title = "Silver Donor 🥈";
-                    badgeClass = "text-secondary";
-                }
-                else if (rank == 3)
-                {
-                    title = "Bronze Donor 🥉";
-                    badgeClass = "text-danger";
-                }
-                else
-                {
-                    title = "-";
-                }
-                <tr>
-                    <td>@rank</td>
-                    <td>@donor.FullName</td>
-                    <td>@donor.TotalPoints</td>
-                    <td class="@badgeClass">@title</td>
-                </tr>
-                rank++;
-            }
-        }
-    </tbody>
-</table>
+                            if (rank == 1)
+                            {
+                                title = "🥇 Gold Donor";
+                                rowClass = "table-warning";
+                            }
+                            else if (rank == 2)
+                            {
+                                title = "🥈 Silver Donor";
+                                rowClass = "table-secondary";
+                            }
+                            else if (rank == 3)
+                            {
+                                title = "🥉 Bronze Donor";
+                                rowClass = "table-danger";
+                            }
+                            else
+                            {
+                                title = "-";
+                                rowClass = "";
+                            }
+                            <tr class="@rowClass fw-semibold">
+                                <td>@rank</td>
+                                <td>@donor.FullName</td>
+                                <td><span class="badge bg-success fs-6">@donor.TotalPoints</span></td>
+                                <td>@title</td>
+                            </tr>
+                            rank++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
