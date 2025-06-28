@@ -1,8 +1,57 @@
-﻿@{
+﻿@model List<ApplicationUser>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+
+    <!-- Welcome Section -->
+    <div class="text-center mb-5">
+        <h1 class="text-danger fw-bold">Welcome to BloodConnect</h1>
+        <p class="lead">Your one-stop solution for blood donation management on campus.</p>
+        <p>Find willing donors, track donation history and help save lives!</p>
+    </div>
+
+    <!-- Top Donors Section -->
+    <div class="mb-5">
+        <h2 class="text-center text-danger mb-4">🏆 Top Donors 🏆</h2>
+
+        <div class="row justify-content-center">
+            @foreach (var user in ViewBag.TopDonors)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card border-danger h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-danger fw-bold">@user.FullName</h5>
+                            <p class="mb-1"><strong>Phone:</strong> @user.PhoneNumber</p>
+                            <p class="mb-1"><strong>Blood Type:</strong> @user.BloodGroup</p>
+                            <p class="mb-0"><strong>Last Donation:</strong> @(user.LastDonationDate?.ToString("d") ?? "N/A")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Available Donors Section -->
+    <div>
+        <h2 class="text-danger mb-4">Available Donors</h2>
+
+        <div class="row">
+            @foreach (var user in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger">@user.FullName</h5>
+                            <p class="mb-1"><strong>Email:</strong> @user.Email</p>
+                            <p class="mb-1"><strong>Phone:</strong> @user.PhoneNumber</p>
+                            <p class="mb-1"><strong>Blood Type:</strong> @user.BloodGroup</p>
+                            <p class="mb-0"><strong>Last Donation:</strong> @(user.LastDonationDate?.ToString("d") ?? "N/A")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
