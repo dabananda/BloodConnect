@@ -36,22 +36,328 @@
     <!-- Available Donors Section -->
     <div>
         <h2 class="text-danger mb-4">Available Donors</h2>
+        
+        <!-- Enhanced Search and Filter Form -->
+        <form method="get" class="mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 text-danger">
+                        <i class="fas fa-filter"></i> Search & Filter Donors
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <!-- Search Input -->
+                        <div class="col-md-4">
+                            <label for="search" class="form-label">Search by Name or Email</label>
+                            <input type="text" 
+                                   id="search"
+                                   name="search" 
+                                   class="form-control" 
+                                   placeholder="Enter name or email..." 
+                                   value="@Context.Request.Query["search"]" />
+                        </div>
 
-        <div class="row">
-            @foreach (var user in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title text-danger">@user.FullName</h5>
-                            <p class="mb-1"><strong>Email:</strong> @user.Email</p>
-                            <p class="mb-1"><strong>Phone:</strong> @user.PhoneNumber</p>
-                            <p class="mb-1"><strong>Blood Type:</strong> @user.BloodGroup</p>
-                            <p class="mb-0"><strong>Last Donation:</strong> @(user.LastDonationDate?.ToString("d") ?? "N/A")</p>
+                        <!-- Blood Group Filter -->
+                        <div class="col-md-4">
+                            <label for="bloodGroup" class="form-label">Blood Group</label>
+                            <select name="bloodGroup" id="bloodGroup" class="form-select">
+                                <option value="">All Blood Groups</option>
+                                @foreach (var bloodGroup in ViewBag.BloodGroups)
+                                {
+                                    @if (Context.Request.Query["bloodGroup"] == bloodGroup)
+                                    {
+                                        <option value="@bloodGroup" selected>@bloodGroup</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@bloodGroup">@bloodGroup</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Department Filter -->
+                        <div class="col-md-4">
+                            <label for="department" class="form-label">Department</label>
+                            <select name="department" id="department" class="form-select">
+                                <option value="">All Departments</option>
+                                @foreach (var department in ViewBag.Departments)
+                                {
+                                    @if (Context.Request.Query["department"] == department)
+                                    {
+                                        <option value="@department" selected>@department</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@department">@department</option>
+                                    }
+                                }
+                            </select>
                         </div>
                     </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-danger me-2">
+                                <i class="fas fa-search"></i> Apply Filters
+                            </button>
+                            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Clear Filters
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Active Filters Display -->
+                    @if (!string.IsNullOrEmpty(Context.Request.Query["search"]) || 
+                         !string.IsNullOrEmpty(Context.Request.Query["bloodGroup"]) || 
+                         !string.IsNullOrEmpty(Context.Request.Query["department"]))
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="alert alert-info mb-0">
+                                    <strong>Active Filters:</strong>
+                                    @if (!string.IsNullOrEmpty(Context.Request.Query["search"]))
+                                    {
+                                        <span class="badge bg-primary me-1">Search: @Context.Request.Query["search"]</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Context.Request.Query["bloodGroup"]))
+                                    {
+                                        <span class="badge bg-danger me-1">Blood Group: @Context.Request.Query["bloodGroup"]</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Context.Request.Query["department"]))
+                                    {
+                                        <span class="badge bg-success me-1">Department: @Context.Request.Query["department"]</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>
+
+        <!-- Results Count and Pagination Info -->
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+            <p class="text-muted mb-0">
+                <i class="fas fa-users"></i> 
+                Showing <strong>@Model.Count</strong> of <strong>@ViewBag.TotalDonors</strong> available donor@(ViewBag.TotalDonors != 1 ? "s" : "")
+                @if (ViewBag.TotalPages > 1)
+                {
+                    <span class="ms-2">
+                        (Page @ViewBag.CurrentPage of @ViewBag.TotalPages)
+                    </span>
+                }
+            </p>
+            @if (ViewBag.TotalPages > 1)
+            {
+                <div class="text-muted">
+                    <i class="fas fa-list"></i> @ViewBag.PageSize per page
                 </div>
             }
         </div>
+
+        <!-- Donors Grid -->
+        @if (Model.Any())
+        {
+            <div class="row">
+                @foreach (var user in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-danger">
+                                    <i class="fas fa-user"></i> @user.FullName
+                                </h5>
+                                <p class="mb-1">
+                                    <i class="fas fa-envelope text-muted"></i> 
+                                    <strong>Email:</strong> @user.Email
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-phone text-muted"></i> 
+                                    <strong>Phone:</strong> @user.PhoneNumber
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-tint text-danger"></i> 
+                                    <strong>Blood Type:</strong> 
+                                    <span class="badge bg-danger">@user.BloodGroup</span>
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-graduation-cap text-muted"></i> 
+                                    <strong>Department:</strong> @user.Department
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-calendar text-muted"></i> 
+                                    <strong>Last Donation:</strong> @(user.LastDonationDate?.ToString("d") ?? "N/A")
+                                </p>
+                            </div>
+                            <div class="card-footer bg-light">
+                                <small class="text-muted">
+                                    <i class="fas fa-star text-warning"></i> 
+                                    Total Points: @user.TotalPoints
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <div class="mb-3">
+                    <i class="fas fa-search fa-3x text-muted"></i>
+                </div>
+                <h4 class="text-muted">No donors found</h4>
+                <p class="text-muted">Try adjusting your search criteria or filters.</p>
+                <a href="@Url.Action("Index")" class="btn btn-outline-danger">
+                    <i class="fas fa-refresh"></i> Show All Donors
+                </a>
+            </div>
+        }
+
+        <!-- Pagination -->
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav aria-label="Donors pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <!-- Previous Page -->
+                    @if (ViewBag.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="@Url.Action("Index", new { 
+                                   page = ViewBag.CurrentPage - 1, 
+                                   search = ViewBag.Search, 
+                                   bloodGroup = ViewBag.BloodGroup, 
+                                   department = ViewBag.Department 
+                               })"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </span>
+                        </li>
+                    }
+
+                    <!-- Page Numbers -->
+                    @{
+                        int startPage = Math.Max(1, ViewBag.CurrentPage - 2);
+                        int endPage = Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 2);
+                        
+                        // Adjust if we're near the beginning or end
+                        if (endPage - startPage < 4)
+                        {
+                            if (startPage == 1)
+                            {
+                                endPage = Math.Min(ViewBag.TotalPages, startPage + 4);
+                            }
+                            else if (endPage == ViewBag.TotalPages)
+                            {
+                                startPage = Math.Max(1, endPage - 4);
+                            }
+                        }
+                    }
+
+                    <!-- First page if not visible -->
+                    @if (startPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="@Url.Action("Index", new { 
+                                   page = 1, 
+                                   search = ViewBag.Search, 
+                                   bloodGroup = ViewBag.BloodGroup, 
+                                   department = ViewBag.Department 
+                               })">1</a>
+                        </li>
+                        @if (startPage > 2)
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        }
+                    }
+
+                    <!-- Visible page numbers -->
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        @if (i == ViewBag.CurrentPage)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link bg-danger border-danger">
+                                    @i
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" 
+                                   href="@Url.Action("Index", new { 
+                                       page = i, 
+                                       search = ViewBag.Search, 
+                                       bloodGroup = ViewBag.BloodGroup, 
+                                       department = ViewBag.Department 
+                                   })">@i</a>
+                            </li>
+                        }
+                    }
+
+                    <!-- Last page if not visible -->
+                    @if (endPage < ViewBag.TotalPages)
+                    {
+                        @if (endPage < ViewBag.TotalPages - 1)
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        }
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="@Url.Action("Index", new { 
+                                   page = ViewBag.TotalPages, 
+                                   search = ViewBag.Search, 
+                                   bloodGroup = ViewBag.BloodGroup, 
+                                   department = ViewBag.Department 
+                               })">@ViewBag.TotalPages</a>
+                        </li>
+                    }
+
+                    <!-- Next Page -->
+                    @if (ViewBag.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="@Url.Action("Index", new { 
+                                   page = ViewBag.CurrentPage + 1, 
+                                   search = ViewBag.Search, 
+                                   bloodGroup = ViewBag.BloodGroup, 
+                                   department = ViewBag.Department 
+                               })"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </span>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
     </div>
 </div>
