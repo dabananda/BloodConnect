@@ -85,6 +85,12 @@ namespace BloodConnect.Areas.Identity.Pages.Account
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
 
+                if (user != null && user.IsSuspended)
+                {
+                    ModelState.AddModelError(string.Empty, "Your account is suspended. Please contact administrator.");
+                    return Page();
+                }
+
                 if (user != null)
                 {
                     if (!user.EmailConfirmed)

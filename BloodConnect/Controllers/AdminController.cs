@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -60,7 +60,12 @@ public class AdminController : Controller
             user.IsSuspended = !user.IsSuspended;
             _context.Update(user);
             await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = user.IsSuspended
+                ? $"{user.FullName} has been suspended."
+                : $"{user.FullName} has been unsuspended.";
         }
+
         return RedirectToAction(nameof(Dashboard));
     }
 

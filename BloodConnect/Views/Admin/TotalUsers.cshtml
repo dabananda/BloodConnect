@@ -9,6 +9,7 @@
             <th>Email</th>
             <th>Blood Group</th>
             <th>Status</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,22 @@
                 <td>@user.Email</td>
                 <td>@user.BloodGroup</td>
                 <td>@(user.IsApprovedByAdmin ? "Approved" : "Pending")</td>
+                <td>
+                    @if (!user.IsSuspended)
+                    {
+                        <form asp-action="ToggleSuspend" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button type="submit" class="btn btn-warning btn-sm">Suspend</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="ToggleSuspend" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button type="submit" class="btn btn-success btn-sm">Unsuspend</button>
+                        </form>
+                    }
+                </td>
             </tr>
         }
     </tbody>

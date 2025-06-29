@@ -28,7 +28,7 @@ namespace BloodConnect.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
 
             var donorsQuery = _context.Users
-                .Where(u => u.IsApprovedByAdmin && u.EmailConfirmed && u.IsAvailable);
+                .Where(u => u.IsApprovedByAdmin && u.EmailConfirmed && u.IsAvailable && !u.IsSuspended);
 
             if (currentUser != null)
             {
