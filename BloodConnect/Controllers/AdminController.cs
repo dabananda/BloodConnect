@@ -72,6 +72,26 @@ public class AdminController : Controller
         return View(pendingUsers);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> ApproveUser(string userId)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user != null)
+        {
+            user.IsApprovedByAdmin = true;
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"User {user.FullName} approved successfully!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "User not found.";
+        }
+
+        return RedirectToAction(nameof(PendingUsers));
+    }
+
     public async Task<IActionResult> TotalUsers()
     {
         var users = await _context.Users.ToListAsync();

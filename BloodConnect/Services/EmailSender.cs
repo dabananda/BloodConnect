@@ -1,43 +1,39 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-public class EmailSender : IEmailSender
+namespace BloodConnect.Services
 {
-    private readonly IConfiguration _configuration;
-
-    public EmailSender(IConfiguration configuration)
+    public class EmailSender : IEmailSender
     {
-        _configuration = configuration;
-    }
+        private readonly SmtpSettings _smtpSettings;
 
-    public async Task SendEmailAsync(string email, string subject, string htmlMessage)
-    {
-        var smtpSection = _configuration.GetSection("Smtp");
-        var host = smtpSection["Host"];
-        var port = int.Parse(smtpSection["Port"]);
-        var enableSsl = bool.Parse(smtpSection["EnableSsl"]);
-        var username = smtpSection["Username"];
-        var password = smtpSection["Password"];
-
-        var client = new SmtpClient(host, port)
+        public EmailSender(IOptions<SmtpSettings> smtpOptions)
         {
-            Credentials = new NetworkCredential(username, password),
-            EnableSsl = enableSsl
-        };
+            _smtpSettings = smtpOptions.Value;
+        }
 
-        var mailMessage = new MailMessage
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            From = new MailAddress(username),
-            Subject = subject,
-            Body = htmlMessage,
-            IsBodyHtml = true,
-        };
+            using var client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
+            {
+                Credentials = new NetworkCredential(_smtpSettings.Username, _smtpSettings.Password),
+                EnableSsl = _smtpSettings.EnableSsl
+            };
 
-        mailMessage.To.Add(email);
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(_smtpSettings.Username),
+                Subject = subject,
+                Body = htmlMessage,
+                IsBodyHtml = true,
+            };
 
-        await client.SendMailAsync(mailMessage);
+            mailMessage.To.Add(email);
+
+            await client.SendMailAsync(mailMessage);
+        }
     }
 }
