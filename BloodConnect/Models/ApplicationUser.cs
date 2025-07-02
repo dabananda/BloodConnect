@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace BloodConnect.Models
 {
@@ -9,6 +10,7 @@ namespace BloodConnect.Models
         public string Department { get; set; }
         public string Session { get; set; }
         public string BloodGroup { get; set; }
+        public string CurrentAddress { get; set; }
         public DateTime? LastDonationDate { get; set; }
         public bool IsAvailable { get; set; }
         public int TotalPoints { get; set; }

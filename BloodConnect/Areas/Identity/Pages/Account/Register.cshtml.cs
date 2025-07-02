@@ -98,6 +98,10 @@ namespace BloodConnect.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Blood Group")]
             public string BloodGroup { get; set; }
+            
+            [Required]
+            [Display(Name = "Currrent Address")]
+            public string CurrentAddress { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -139,7 +143,9 @@ namespace BloodConnect.Areas.Identity.Pages.Account
                 user.Department = Input.Department;
                 user.Session = Input.Session;
                 user.BloodGroup = Input.BloodGroup;
-                user.IsApprovedByAdmin = false; // All users start unapproved
+                user.CurrentAddress = Input.CurrentAddress;
+                user.IsAvailable = true;
+                user.IsApprovedByAdmin = false;
                 user.RegisteredAt = DateTime.UtcNow;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -182,7 +188,7 @@ namespace BloodConnect.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // If something failed, redisplay form
             return Page();
         }
 

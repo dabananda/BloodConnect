@@ -40,6 +40,7 @@ namespace BloodConnect.Data
                     FullName = "System Admin",
                     IsApprovedByAdmin = true,
                     BloodGroup = "Admin",
+                    CurrentAddress = "AdminCurrentAddress",
                     StudentId = "ADMIN001",
                     Department = "Admin",
                     Session = "N/A",
