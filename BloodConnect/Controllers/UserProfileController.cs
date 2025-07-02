@@ -1,4 +1,5 @@
 ﻿using BloodConnect.Data;
+using BloodConnect.Helpers;
 using BloodConnect.Models;
 using BloodConnect.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,8 @@ namespace BloodConnect.Controllers
         public async Task<IActionResult> Edit()
         {
             var user = await _userManager.GetUserAsync(User);
+            ViewBag.BloodGroups = StaticData.BloodGroups;
+            ViewBag.Departments = StaticData.Departments;
             return View(user);
         }
 
