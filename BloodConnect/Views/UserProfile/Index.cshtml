@@ -90,12 +90,13 @@
                     <!-- Optional Extra Actions -->
                     <div class="mt-3">
                         <a asp-action="Edit" class="btn btn-danger me-2">Edit Profile</a>
-                        <a asp-action="Dashboard" class="btn btn-outline-secondary">Go to Dashboard</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Dashboard" class="btn btn-outline-secondary">Go to Dashboard</a>
+                        }
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </div>

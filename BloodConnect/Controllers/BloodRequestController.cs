@@ -1,14 +1,17 @@
 ﻿using BloodConnect.Data;
 using BloodConnect.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BloodConnect.Controllers
 {
+    [Authorize]
     public class BloodRequestController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +25,7 @@ namespace BloodConnect.Controllers
             _emailSender = emailSender;
         }
 
-        // Step 1: Show available donors
+        // Step 1: Show Available Donors
         public async Task<IActionResult> AvailableDonors()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -34,36 +37,47 @@ namespace BloodConnect.Controllers
             return View(donors);
         }
 
-        // Step 2: Send a blood request
-        public async Task<IActionResult> RequestBlood(string donorId)
+        // ✅ Step 2: Handle Blood Request Form POST (from Modal)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RequestBlood(string DonorId, string Reason, string Location, string RequestorPhone)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            var donor = await _userManager.FindByIdAsync(donorId);
+            var donor = await _context.Users.FindAsync(DonorId);
+            var requestor = await _userManager.GetUserAsync(User);
 
-            if (donor == null || currentUser == null)
+            if (donor == null || requestor == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Invalid donor or requestor.";
+                return RedirectToAction("Index", "Home");
             }
 
-            var request = new BloodRequest
+            var newRequest = new BloodRequest
             {
-                DonorId = donorId,
-                RequestorId = currentUser.Id,
-                Status = RequestStatus.Pending
+                DonorId = donor.Id,
+                RequestorId = requestor.Id,
+                Status = RequestStatus.Pending,
+                RequestDate = DateTime.Now,
+                Reason = Reason,
+                Location = Location,
+                RequestorPhone = RequestorPhone
             };
 
-            _context.BloodRequests.Add(request);
+            _context.BloodRequests.Add(newRequest);
             await _context.SaveChangesAsync();
 
-            // Email Notification to Donor
-            string subject = "New Blood Donation Request";
+            // Email notification to Donor
+            string subject = "New Blood Donation Request Received";
             string message = $"Hello {donor.FullName},<br/><br/>" +
-                             $"You have received a new blood donation request from <strong>{currentUser.FullName}</strong>.<br/>" +
-                             $"Please login to Blood Connect and respond.<br/><br/>Thank you!";
+                             $"You have a new blood donation request from <strong>{requestor.FullName}</strong>.<br/><br/>" +
+                             $"<strong>Reason:</strong> {Reason}<br/>" +
+                             $"<strong>Location:</strong> {Location}<br/>" +
+                             $"<strong>Requestor Phone:</strong> {RequestorPhone}<br/><br/>" +
+                             $"Please login to Blood Connect to Accept or Decline the request.<br/><br/>Thank you!";
 
             await _emailSender.SendEmailAsync(donor.Email, subject, message);
 
-            return RedirectToAction(nameof(MySentRequests));
+            TempData["SuccessMessage"] = "Your blood request has been sent successfully!";
+            return RedirectToAction("Index", "Home");
         }
 
         // Step 3: View My Sent Requests
@@ -90,7 +104,7 @@ namespace BloodConnect.Controllers
             return View(received);
         }
 
-        // Step 5: Donor Accept Request
+        // Step 5: Donor Accepts Request
         public async Task<IActionResult> Accept(int id)
         {
             var request = await _context.BloodRequests
@@ -103,11 +117,11 @@ namespace BloodConnect.Controllers
                 request.Status = RequestStatus.Accepted;
                 await _context.SaveChangesAsync();
 
-                // Send email notification to Requestor
+                // Notify Requestor
                 string subject = "Your Blood Request Has Been Accepted!";
                 string message = $"Hello {request.Requestor.FullName},<br/><br/>" +
-                                 $"Good news! <strong>{request.Donor.FullName}</strong> has accepted your blood donation request.<br/>" +
-                                 $"Please contact the donor at: <strong>{request.Donor.PhoneNumber}</strong>.<br/><br/>" +
+                                 $"<strong>{request.Donor.FullName}</strong> has accepted your blood donation request.<br/><br/>" +
+                                 $"You can contact the donor at: <strong>{request.Donor.PhoneNumber}</strong>.<br/><br/>" +
                                  $"Thank you for using Blood Connect.";
 
                 await _emailSender.SendEmailAsync(request.Requestor.Email, subject, message);
@@ -116,7 +130,7 @@ namespace BloodConnect.Controllers
             return RedirectToAction(nameof(MyReceivedRequests));
         }
 
-        // Step 6: Donor Decline Request
+        // Step 6: Donor Declines Request
         public async Task<IActionResult> Decline(int id)
         {
             var request = await _context.BloodRequests
@@ -129,11 +143,11 @@ namespace BloodConnect.Controllers
                 request.Status = RequestStatus.Declined;
                 await _context.SaveChangesAsync();
 
-                // Email notification to Requestor
+                // Notify Requestor
                 string subject = "Your Blood Request Was Declined";
                 string message = $"Hello {request.Requestor.FullName},<br/><br/>" +
-                                 $"Unfortunately, <strong>{request.Donor.FullName}</strong> has declined your blood donation request.<br/>" +
-                                 $"You may consider sending a request to another donor.<br/><br/>Thank you for using Blood Connect.";
+                                 $"<strong>{request.Donor.FullName}</strong> has declined your blood donation request.<br/><br/>" +
+                                 $"You may send requests to other available donors.<br/><br/>Thank you for using Blood Connect.";
 
                 await _emailSender.SendEmailAsync(request.Requestor.Email, subject, message);
             }
@@ -141,7 +155,7 @@ namespace BloodConnect.Controllers
             return RedirectToAction(nameof(MyReceivedRequests));
         }
 
-        // Step 7: Requestor Marks as Completed (after donation)
+        // Step 7: Requestor Marks as Completed
         public async Task<IActionResult> MarkAsCompleted(int id)
         {
             var request = await _context.BloodRequests
@@ -153,17 +167,17 @@ namespace BloodConnect.Controllers
             {
                 request.Status = RequestStatus.Completed;
 
-                // Award points
+                // Award points and update last donation
                 request.Donor.TotalPoints += 10;
                 request.Donor.LastDonationDate = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
 
-                // Email notification to Donor
-                string subject = "Your Blood Donation is Marked Completed!";
+                // Notify Donor
+                string subject = "Blood Donation Completed!";
                 string message = $"Hello {request.Donor.FullName},<br/><br/>" +
-                                 $"Great news! <strong>{request.Requestor.FullName}</strong> has marked the blood donation request as completed.<br/>" +
-                                 $"You have earned <strong>10 points</strong> for this donation.<br/><br/>Thank you for saving lives!";
+                                 $"<strong>{request.Requestor.FullName}</strong> has marked the blood donation as completed.<br/><br/>" +
+                                 $"You have earned <strong>10 points</strong>.<br/><br/>Thank you for saving lives!";
 
                 await _emailSender.SendEmailAsync(request.Donor.Email, subject, message);
             }

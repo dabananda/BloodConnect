@@ -4,44 +4,50 @@
     ViewData["Title"] = "Edit Profile";
 }
 
-<h2>Edit Profile</h2>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+        <h2 class="text-center">Update Your Profile</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="PhoneNumber"></label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="PhoneNumber">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Department"></label>
+                <input asp-for="Department" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Session"></label>
+                <input asp-for="Session" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BloodGroup">Blood Group</label>
+                <input asp-for="BloodGroup" class="form-control" />
+            </div>
+
+            <div class="form-check">
+                <input asp-for="IsAvailable" class="form-check-input" />
+                <label asp-for="IsAvailable" class="form-check-label">Available to Donate?</label>
+            </div>
+
+            <hr />
+
+            <!-- Profile Picture Upload -->
+            <div class="form-group mt-3">
+                <label for="ProfilePictureFile">Profile Picture</label>
+                <input type="file" name="ProfilePictureFile" class="form-control" />
+            </div>
+
+            <br />
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-danger">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Department"></label>
-        <input asp-for="Department" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Session"></label>
-        <input asp-for="Session" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="BloodGroup"></label>
-        <input asp-for="BloodGroup" class="form-control" />
-    </div>
-
-    <div class="form-check">
-        <input asp-for="IsAvailable" class="form-check-input" />
-        <label asp-for="IsAvailable" class="form-check-label">Available to Donate?</label>
-    </div>
-
-    <hr />
-
-    <!-- Profile Picture Upload -->
-    <div class="form-group mt-3">
-        <label for="ProfilePictureFile">Profile Picture</label>
-        <input type="file" name="ProfilePictureFile" class="form-control" />
-    </div>
-
-    <br />
-    <button type="submit" class="btn btn-danger">Save Changes</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+</div>

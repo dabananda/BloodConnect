@@ -23,8 +23,8 @@
                     <div class="card border-danger h-100 shadow-sm">
                         <div class="card-body text-center">
                             <h5 class="card-title text-danger fw-bold">@user.FullName</h5>
-                            <p class="mb-1"><strong>Phone:</strong> @user.PhoneNumber</p>
-                            <p class="mb-1"><strong>Blood Type:</strong> @user.BloodGroup</p>
+                            <p class="mb-1"><i class="fa-solid fa-medal"></i> <strong>Points:</strong> @user.TotalPoints</p>
+                            <p class="mb-1"><strong>Blood Group:</strong> @user.BloodGroup</p>
                             <p class="mb-0"><strong>Last Donation:</strong> @(user.LastDonationDate?.ToString("d") ?? "N/A")</p>
                         </div>
                     </div>
@@ -166,14 +166,10 @@
                 {
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <div class="card-body">
+                            <div class="card-body cursor-pointer" data-bs-toggle="modal" data-bs-target="#requestModal-@user.Id">
                                 <h5 class="card-title text-danger">
                                     <i class="fas fa-user"></i> @user.FullName
                                 </h5>
-                                <p class="mb-1">
-                                    <i class="fas fa-envelope text-muted"></i> 
-                                    <strong>Email:</strong> @user.Email
-                                </p>
                                 <p class="mb-1">
                                     <i class="fas fa-phone text-muted"></i> 
                                     <strong>Phone:</strong> @user.PhoneNumber
@@ -184,19 +180,59 @@
                                     <span class="badge bg-danger">@user.BloodGroup</span>
                                 </p>
                                 <p class="mb-1">
+                                    <i class="fa-solid fa-map-location-dot text-muted"></i>
+                                    <strong>Address:</strong> 
+                                    <span class="badge bg-danger">@user.CurrentAddress</span>
+                                </p>
+                                <p class="mb-1">
                                     <i class="fas fa-graduation-cap text-muted"></i> 
                                     <strong>Department:</strong> @user.Department
                                 </p>
-                                <p class="mb-0">
+                                <p class="mb-1">
                                     <i class="fas fa-calendar text-muted"></i> 
                                     <strong>Last Donation:</strong> @(user.LastDonationDate?.ToString("d") ?? "N/A")
                                 </p>
-                            </div>
-                            <div class="card-footer bg-light">
-                                <small class="text-muted">
+                                <p class="mb-0">
                                     <i class="fas fa-star text-warning"></i> 
-                                    Total Points: @user.TotalPoints
-                                </small>
+                                    <strong>Total Points:</strong> @user.TotalPoints
+                                </p>
+                            </div>
+
+                            <!-- Modal for this user -->
+                            <div class="modal fade" id="requestModal-@user.Id" tabindex="-1" aria-labelledby="requestModalLabel-@user.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <form asp-controller="BloodRequest" asp-action="RequestBlood" method="post">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger" id="requestModalLabel-@user.Id">Request Blood from @user.FullName</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <input type="hidden" name="DonorId" value="@user.Id" />
+
+                                                <div class="mb-3">
+                                                    <label for="Reason" class="form-label">Reason for Request</label>
+                                                    <textarea name="Reason" class="form-control" required></textarea>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="Location" class="form-label">Donation Location</label>
+                                                    <input name="Location" class="form-control" required />
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="RequestorPhone" class="form-label">Your Phone Number</label>
+                                                    <input name="RequestorPhone" class="form-control" required />
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Request Blood</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

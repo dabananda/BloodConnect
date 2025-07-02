@@ -17,7 +17,7 @@
                             <th>Donor Name</th>
                             <th>Request Date</th>
                             <th>Status</th>
-                            @* <th>Action</th> *@
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,18 +43,18 @@
                                             break;
                                     }
                                 </td>
-                                @* <td>
-                            @if (request.Status == BloodConnect.Models.RequestStatus.Accepted)
-                            {
-                                <a asp-action="MarkAsCompleted" asp-route-id="@request.Id" class="btn btn-sm btn-success">
-                                    ✅ Mark as Completed
-                                </a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">-</span>
-                            }
-                        </td> *@
+                                <td>
+                                    @if (request.Status == BloodConnect.Models.RequestStatus.Accepted)
+                                    {
+                                        <a asp-action="MarkAsCompleted" asp-route-id="@request.Id" class="btn btn-sm btn-success">
+                                            Mark as Completed
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
