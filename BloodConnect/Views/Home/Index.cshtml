@@ -196,6 +196,25 @@
                                     <i class="fas fa-star text-warning"></i> 
                                     <strong>Total Points:</strong> @user.TotalPoints
                                 </p>
+
+                                @* @if (user.LastDonationDate.HasValue)
+                                {
+                                    var nextEligibleDate = user.LastDonationDate.Value.AddMonths(4);
+                                    var daysRemaining = (nextEligibleDate - DateTime.UtcNow).Days;
+
+                                    if (daysRemaining > 0)
+                                    {
+                                        <p class="text-danger"><strong>Eligible in:</strong> @daysRemaining days</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-success"><strong>Eligible now</strong></p>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-success"><strong>Eligible now</strong></p>
+                                } *@
                             </div>
 
                             <!-- Modal for this user -->
@@ -208,27 +227,39 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-
                                                 <input type="hidden" name="DonorId" value="@user.Id" />
 
-                                                <div class="mb-3">
-                                                    <label for="Reason" class="form-label">Reason for Request</label>
-                                                    <textarea name="Reason" class="form-control" required></textarea>
-                                                </div>
+                                                @if (user.LastDonationDate.HasValue && user.LastDonationDate.Value.AddMonths(4) > DateTime.UtcNow)
+                                                {
+                                                    var nextEligibleDate = user.LastDonationDate.Value.AddMonths(4);
+                                                    var daysRemaining = (nextEligibleDate - DateTime.UtcNow).Days;
 
-                                                <div class="mb-3">
-                                                    <label for="Location" class="form-label">Donation Location</label>
-                                                    <input name="Location" class="form-control" required />
-                                                </div>
+                                                    <div class="alert alert-warning">
+                                                        <h5>Not Eligible Yet</h5>
+                                                        <p>This donor donated recently and will be eligible to donate again after <strong>@nextEligibleDate.ToString("MMMM dd, yyyy")</strong> (~<strong>@daysRemaining days remaining</strong>).</p>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="mb-3">
+                                                        <label for="Reason" class="form-label">Reason for Request</label>
+                                                        <textarea name="Reason" class="form-control" required></textarea>
+                                                    </div>
 
-                                                <div class="mb-3">
-                                                    <label for="RequestorPhone" class="form-label">Your Phone Number</label>
-                                                    <input name="RequestorPhone" class="form-control" required />
-                                                </div>
+                                                    <div class="mb-3">
+                                                        <label for="Location" class="form-label">Donation Location</label>
+                                                        <input name="Location" class="form-control" required />
+                                                    </div>
 
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-danger">Request Blood</button>
+                                                    <div class="mb-3">
+                                                        <label for="RequestorPhone" class="form-label">Your Phone Number</label>
+                                                        <input name="RequestorPhone" class="form-control" required />
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-danger">Request Blood</button>
+                                                    </div>
+                                                }
                                             </div>
                                         </form>
                                     </div>

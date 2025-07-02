@@ -49,8 +49,8 @@
                                     @if (request.Status == BloodConnect.Models.RequestStatus.Pending)
                                     {
                                         <div class="btn-group" role="group">
-                                            <a asp-action="Accept" asp-route-id="@request.Id" class="btn btn-success btn-sm">✅ Accept</a>
-                                            <a asp-action="Decline" asp-route-id="@request.Id" class="btn btn-danger btn-sm">❌ Decline</a>
+                                            <a asp-action="Accept" asp-route-id="@request.Id" class="btn btn-success btn-sm me-2">Accept</a>
+                                            <a asp-action="Decline" asp-route-id="@request.Id" class="btn btn-danger btn-sm">Decline</a>
                                         </div>
                                     }
                                     else

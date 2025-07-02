@@ -51,6 +51,13 @@ namespace BloodConnect.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            // Check donor eligibility (4 month rule)
+            if (donor.LastDonationDate.HasValue && donor.LastDonationDate.Value.AddMonths(4) > DateTime.UtcNow)
+            {
+                TempData["ErrorMessage"] = "This donor is not eligible to donate again yet (4 month waiting period).";
+                return RedirectToAction("Index", "Home");
+            }
+
             var newRequest = new BloodRequest
             {
                 DonorId = donor.Id,
