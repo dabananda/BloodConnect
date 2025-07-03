@@ -32,16 +32,19 @@
                     {
                         <ul class="navbar-nav mx-auto">
                             <li class="nav-item">
+                                <a class="nav-link text-dark" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" href="/BloodRequest/MySentRequests">My Sent Requests</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="/BloodRequest/MyReceivedRequests">Requests Received</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/UserProfile/Index">My Profile</a>
+                                <a class="nav-link text-dark" href="/Leaderboard/TopDonors">Leaderboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Leaderboard/TopDonors">Leaderboard</a>
+                                <a class="nav-link text-dark" href="/UserProfile/Index">My Profile</a>
                             </li>
 
                             @if (User.IsInRole("Admin"))

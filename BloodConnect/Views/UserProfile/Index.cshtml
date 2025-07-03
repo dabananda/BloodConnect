@@ -92,7 +92,7 @@
                         <a asp-action="Edit" class="btn btn-danger me-2">Edit Profile</a>
                         @if (User.IsInRole("Admin"))
                         {
-                            <a asp-action="Dashboard" class="btn btn-outline-secondary">Go to Dashboard</a>
+                            <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-outline-secondary">Go to Dashboard</a>
                         }
                     </div>
                 </div>

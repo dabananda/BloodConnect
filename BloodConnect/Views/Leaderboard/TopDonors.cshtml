@@ -2,61 +2,71 @@
 
 @{
     ViewData["Title"] = "Top Donors Leaderboard";
+    var rank = 1;
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-12 col-md-10">
-            <h2 class="text-danger mb-4">🏆 Top 10 Blood Donors Leaderboard</h2>
+        <div class="col-12 col-lg-10">
+            <h2 class="text-danger mb-4">
+                <i class="fas fa-trophy me-2"></i>Top 10 Blood Donors Leaderboard
+            </h2>
 
-            <table class="table table-hover table-striped text-center shadow-sm">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Rank</th>
-                        <th>Donor Name</th>
-                        <th>Total Points</th>
-                        <th>Title</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var rank = 1;
-                        foreach (var donor in Model)
+            <div class="table-responsive shadow-sm rounded">
+                <table class="table align-middle text-center leaderboard-table">
+                    <thead class="table-dark text-white">
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Donor Name</th>
+                            <th scope="col">Total Points</th>
+                            <th scope="col">Title</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var donor in Model)
                         {
-                            string title = "";
+                            string title = "-";
                             string rowClass = "";
+                            string rankIcon = "";
 
-                            if (rank == 1)
+                            switch (rank)
                             {
-                                title = "🥇 Blood Hero";
-                                rowClass = "table-warning";
+                                case 1:
+                                    title = "🥇 Blood Hero";
+                                    rowClass = "gold-row";
+                                    rankIcon = "<i class='fas fa-crown text-warning'></i>";
+                                    break;
+                                case 2:
+                                    title = "🥈 Elite Donor";
+                                    rowClass = "silver-row";
+                                    rankIcon = "<i class='fas fa-medal text-danger'></i>";
+                                    break;
+                                case 3:
+                                    title = "🥉 Blood Knight";
+                                    rowClass = "bronze-row";
+                                    rankIcon = "<i class='fas fa-star text-secondary'></i>";
+                                    break;
                             }
-                            else if (rank == 2)
-                            {
-                                title = "🥈 Elite Donor";
-                                rowClass = "table-secondary";
-                            }
-                            else if (rank == 3)
-                            {
-                                title = "🥉 Blood Knight";
-                                rowClass = "table-danger";
-                            }
-                            else
-                            {
-                                title = "-";
-                                rowClass = "";
-                            }
-                            <tr class="@rowClass fw-semibold">
-                                <td>@rank</td>
-                                <td>@donor.FullName</td>
+
+                            <tr class="@rowClass">
+                                <td class="fw-bold">@rank. @Html.Raw(rankIcon)</td>
+                                <td class="text-start">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="avatar bg-danger text-white fw-bold">
+                                            @donor.FullName.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <span>@donor.FullName</span>
+                                    </div>
+                                </td>
                                 <td><span class="badge bg-success fs-6">@donor.TotalPoints</span></td>
                                 <td>@title</td>
                             </tr>
+
                             rank++;
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
