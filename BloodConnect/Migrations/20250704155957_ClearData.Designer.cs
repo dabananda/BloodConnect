@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BloodConnect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250704075946_DataUpdate")]
-    partial class DataUpdate
+    [Migration("20250704155957_ClearData")]
+    partial class ClearData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

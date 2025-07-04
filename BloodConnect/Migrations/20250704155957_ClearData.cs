@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BloodConnect.Migrations
 {
     /// <inheritdoc />
-    public partial class DataUpdate : Migration
+    public partial class ClearData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
