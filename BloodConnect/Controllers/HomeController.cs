@@ -27,10 +27,10 @@ namespace BloodConnect.Controllers
 
         public async Task<IActionResult> Index(string search, string bloodGroup, string department, int page = 1)
         {
-            const int pageSize = 12; // 12 donors per page
+            const int pageSize = 12;
 
             var currentUser = await _userManager.GetUserAsync(User);
-            var currentUserId = currentUser?.Id; // Handle null user
+            var currentUserId = currentUser?.Id;
 
             var donorsQuery = _context.Users
                 .Where(u => u.IsApprovedByAdmin && u.EmailConfirmed && u.IsAvailable &&
@@ -61,13 +61,13 @@ namespace BloodConnect.Controllers
 
             // Get paginated donors
             var donors = await donorsQuery
-                .OrderBy(u => u.FullName) // Add consistent ordering for pagination
+                .OrderBy(u => u.FullName)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             var topDonors = await _context.Users
-                .Where(u => u.IsApprovedByAdmin && u.EmailConfirmed)
+                .Where(u => u.IsApprovedByAdmin && u.EmailConfirmed && u.TotalPoints >= 10)
                 .OrderByDescending(u => u.TotalPoints)
                 .Take(3)
                 .ToListAsync();

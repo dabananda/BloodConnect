@@ -1,6 +1,7 @@
 ﻿@model List<ApplicationUser>
 @{
     ViewData["Title"] = "Home Page";
+    var topDonors = ViewBag.TopDonors as List<ApplicationUser>; 
 }
 
 <div class="container">
@@ -24,23 +25,32 @@
     </div>
 
     <!-- top donors -->
-    <div class="my-5">
-        <h2 class="text-center text-danger mb-5 fw-bold"><i class="fa-solid fa-medal"></i> Top Donors <i class="fa-solid fa-medal"></i></h2>
-        <div class="row g-4 justify-content-center">
-            @foreach (var user in ViewBag.TopDonors)
-            {
-                <div class="col-md-2 col-sm-4 col-6">
-                    <div class="donor-wrapper">
-                        <div class="donor-img-wrapper">
-                            <img src="@(user.ProfilePictureUrl ?? "/images/default_user.png")" alt="@user.FullName" class="donor-img" />
+    @if (topDonors != null && topDonors.Any())
+    {
+        <div class="my-5">
+            <h2 class="text-center text-danger mb-5 fw-bold">
+                <i class="fa-solid fa-medal"></i> Top Donors <i class="fa-solid fa-medal"></i>
+            </h2>
+            <div class="row g-4 justify-content-center">
+                @foreach (var user in topDonors)
+                {
+                    <div class="col-md-2 col-sm-4 col-6">
+                        <div class="donor-wrapper">
+                            <div class="donor-img-wrapper">
+                                <img src="@(user.ProfilePictureUrl ?? "/images/default_user.png")" alt="@user.FullName" class="donor-img" />
+                            </div>
+                            <div class="donor-name">@user.FullName</div>
+                            <div class="donor-blood">@user.BloodGroup</div>
                         </div>
-                        <div class="donor-name">@user.FullName</div>
-                        <div class="donor-blood">@user.BloodGroup</div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="my-5"></div>
+    }
 
     <!-- Available Donors Section -->
     <div>
