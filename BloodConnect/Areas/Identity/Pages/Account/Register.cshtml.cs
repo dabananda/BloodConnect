@@ -61,6 +61,11 @@ namespace BloodConnect.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [Display(Name = "Phone Number")]
+            [MinLength(11, ErrorMessage = "Phone number must be at least 11 digits long.")]
+            public string PhoneNumber { get; set; }
+
+            [Required]
             [Display(Name = "Full Name")]
             public string FullName { get; set; }
 
@@ -115,13 +120,14 @@ namespace BloodConnect.Areas.Identity.Pages.Account
                 var user = CreateUser();
 
                 user.FullName = Input.FullName;
+                user.PhoneNumber = Input.PhoneNumber;
                 user.StudentId = Input.StudentId;
                 user.Department = Input.Department;
                 user.Session = Input.Session;
                 user.BloodGroup = Input.BloodGroup;
                 user.CurrentAddress = Input.CurrentAddress;
                 user.IsAvailable = true;
-                user.IsApprovedByAdmin = false;
+                user.IsApprovedByAdmin = true;
                 user.RegisteredAt = DateTime.UtcNow;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
