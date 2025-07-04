@@ -37,14 +37,14 @@ namespace BloodConnect.Data
                     UserName = adminEmail,
                     Email = adminEmail,
                     EmailConfirmed = true,
-                    FullName = "System Admin",
+                    FullName = "Dabananda Mitra",
                     IsApprovedByAdmin = true,
-                    BloodGroup = "Admin",
-                    CurrentAddress = "AdminCurrentAddress",
-                    StudentId = "ADMIN001",
+                    BloodGroup = "B+",
+                    CurrentAddress = "Mirpur 13, Dhaka",
+                    StudentId = "031920028",
                     Department = "Admin",
-                    Session = "N/A",
-                    PhoneNumber = "0000000000"
+                    Session = "2019-20",
+                    PhoneNumber = "01304080014"
                 };
 
                 var result = await userManager.CreateAsync(newAdmin, adminPassword);
