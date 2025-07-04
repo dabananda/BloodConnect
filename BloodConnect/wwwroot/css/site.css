@@ -370,3 +370,9 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+
+/* confirm email */
+.fa-envelope-circle-check {
+    color: #28a745;
+}
