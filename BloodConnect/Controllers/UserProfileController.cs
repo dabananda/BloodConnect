@@ -48,6 +48,8 @@ namespace BloodConnect.Controllers
             if (user != null)
             {
                 user.PhoneNumber = model.PhoneNumber;
+                user.CurrentAddress = model.CurrentAddress;
+                user.Email = model.Email;
                 user.IsAvailable = model.IsAvailable;
                 user.Department = model.Department;
                 user.Session = model.Session;

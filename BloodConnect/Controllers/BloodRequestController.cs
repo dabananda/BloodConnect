@@ -94,6 +94,7 @@ namespace BloodConnect.Controllers
             var myRequests = await _context.BloodRequests
                 .Include(r => r.Donor)
                 .Where(r => r.RequestorId == currentUser.Id)
+                .OrderByDescending(r => r.RequestDate)
                 .ToListAsync();
 
             return View(myRequests);
@@ -106,6 +107,7 @@ namespace BloodConnect.Controllers
             var received = await _context.BloodRequests
                 .Include(r => r.Requestor)
                 .Where(r => r.DonorId == currentUser.Id)
+                .OrderByDescending(r => r.RequestDate)
                 .ToListAsync();
 
             return View(received);

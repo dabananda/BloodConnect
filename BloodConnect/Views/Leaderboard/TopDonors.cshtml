@@ -5,10 +5,10 @@
     var rank = 1;
 }
 
-<div class="container mt-4">
+<div class="container my-4">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
-            <h2 class="text-danger mb-4">
+            <h2 class="text-danger mb-4 text-center">
                 <i class="fas fa-trophy me-2"></i>Top 10 Blood Donors Leaderboard
             </h2>
 
@@ -27,39 +27,41 @@
                         {
                             string title = "-";
                             string rowClass = "";
-                            string rankIcon = "";
+                            string iconHtml = "";
 
                             switch (rank)
                             {
                                 case 1:
-                                    title = "🥇 Blood Hero";
+                                    title = "Blood Hero";
                                     rowClass = "gold-row";
-                                    rankIcon = "<i class='fas fa-crown text-warning'></i>";
+                                    iconHtml = "<i class='fas fa-crown text-warning ms-2'></i>";
                                     break;
                                 case 2:
-                                    title = "🥈 Elite Donor";
+                                    title = "Elite Donor";
                                     rowClass = "silver-row";
-                                    rankIcon = "<i class='fas fa-medal text-danger'></i>";
+                                    iconHtml = "<i class='fas fa-medal text-danger ms-2'></i>";
                                     break;
                                 case 3:
-                                    title = "🥉 Blood Knight";
+                                    title = "The Champion";
                                     rowClass = "bronze-row";
-                                    rankIcon = "<i class='fas fa-star text-secondary'></i>";
+                                    iconHtml = "<i class='fas fa-star text-secondary ms-2'></i>";
                                     break;
                             }
 
                             <tr class="@rowClass">
-                                <td class="fw-bold">@rank. @Html.Raw(rankIcon)</td>
+                                <td class="fw-bold">@rank.</td>
                                 <td class="text-start">
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="avatar bg-danger text-white fw-bold">
-                                            @donor.FullName.Substring(0, 1).ToUpper()
+                                            @donor.BloodGroup
                                         </div>
                                         <span>@donor.FullName</span>
                                     </div>
                                 </td>
                                 <td><span class="badge bg-success fs-6">@donor.TotalPoints</span></td>
-                                <td>@title</td>
+                                <td>
+                                    @Html.Raw(iconHtml) @title
+                                </td>
                             </tr>
 
                             rank++;

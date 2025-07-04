@@ -9,7 +9,7 @@
     <div class="col-md-5 mx-auto">
         <section class="p-4">
             <form id="account" method="post">
-                <h2 class="text-center mb-4">Welcome to Blood Connect</h2>
+                <h2 class="text-center mb-4 text-danger">Welcome to Blood Connect</h2>
                 
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
@@ -22,21 +22,21 @@
                     <label asp-for="Input.Password" class="form-label">Password</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="checkbox mb-3">
+                @* <div class="checkbox mb-3">
                     <label asp-for="Input.RememberMe" class="form-label">
                         <input class="form-check-input" asp-for="Input.RememberMe" />
                         @Html.DisplayNameFor(m => m.Input.RememberMe)
                     </label>
-                </div>
+                </div> *@
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-danger">Log In</button>
                 </div>
                 <div class="text-center py-3">
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" asp-page="./ForgotPassword" class="text-danger">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Don't have an account? Sign up</a>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-danger">Don't have an account? Sign up</a>
                     </p>
                 </div>
             </form>

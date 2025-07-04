@@ -4,62 +4,65 @@
     ViewData["Title"] = "Edit Profile";
 }
 
-<div class="row justify-content-center">
+<div class="row justify-content-center mb-5">
     <div class="col-12 col-md-6">
-        <h2 class="text-center">Update Your Profile</h2>
+        <h2 class="text-center text-danger mb-4">Update Your Profile</h2>
 
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label asp-for="PhoneNumber">Phone Number</label>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="PhoneNumber" class="form-label"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
-            @* <div class="form-group">
-                <label asp-for="Department"></label>
-                <input asp-for="Department" class="form-control" />
-            </div> *@
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
 
-            <div class="form-group">
-                <label asp-for="Department"></label>
+            <div class="mb-3">
+                <label asp-for="CurrentAddress" class="form-label"></label>
+                <input asp-for="CurrentAddress" class="form-control" />
+                <span asp-validation-for="CurrentAddress" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Department" class="form-label"></label>
                 <select asp-for="Department" class="form-control" asp-items="new SelectList(ViewBag.Departments)">
                     <option value="">-- Select Department --</option>
                 </select>
                 <span asp-validation-for="Department" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Session"></label>
+            <div class="mb-3">
+                <label asp-for="Session" class="form-label"></label>
                 <input asp-for="Session" class="form-control" />
+                <span asp-validation-for="Session" class="text-danger"></span>
             </div>
 
-            @* <div class="form-group">
-                <label asp-for="BloodGroup">Blood Group</label>
-                <input asp-for="BloodGroup" class="form-control" />
-            </div> *@
-
-            <div class="form-group">
-                <label asp-for="BloodGroup"></label>
+            <div class="mb-3">
+                <label asp-for="BloodGroup" class="form-label"></label>
                 <select asp-for="BloodGroup" class="form-control" asp-items="new SelectList(ViewBag.BloodGroups)">
                     <option value="">-- Select Blood Group --</option>
                 </select>
                 <span asp-validation-for="BloodGroup" class="text-danger"></span>
             </div>
 
-            <div class="form-check">
+            <div class="form-check mb-3">
                 <input asp-for="IsAvailable" class="form-check-input" />
-                <label asp-for="IsAvailable" class="form-check-label">Available to Donate?</label>
+                <label asp-for="IsAvailable" class="form-check-label"></label>
             </div>
 
             <hr />
 
-            <!-- Profile Picture Upload -->
-            <div class="form-group mt-3">
-                <label for="ProfilePictureFile">Profile Picture</label>
+            <div class="mb-3">
+                <label for="ProfilePictureFile" class="form-label">Profile Picture</label>
                 <input type="file" name="ProfilePictureFile" class="form-control" />
             </div>
 
-            <br />
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-danger">Save Changes</button>
                 <a asp-action="Index" class="btn btn-secondary">Cancel</a>
