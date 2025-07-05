@@ -102,6 +102,11 @@ namespace BloodConnect.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Response.Redirect("/"); // redirect to home
+                return;
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             BloodGroupList = new SelectList(StaticData.BloodGroups);
