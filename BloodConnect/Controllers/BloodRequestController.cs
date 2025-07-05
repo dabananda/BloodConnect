@@ -84,7 +84,7 @@ namespace BloodConnect.Controllers
             await _emailSender.SendEmailAsync(donor.Email, subject, message);
 
             TempData["SuccessMessage"] = "Your blood request has been sent successfully!";
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(MySentRequests));
         }
 
         // View My Sent Requests
