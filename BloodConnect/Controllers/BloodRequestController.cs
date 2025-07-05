@@ -25,7 +25,7 @@ namespace BloodConnect.Controllers
             _emailSender = emailSender;
         }
 
-        // Step 1: Show Available Donors
+        // Show Available Donors
         public async Task<IActionResult> AvailableDonors()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -37,7 +37,7 @@ namespace BloodConnect.Controllers
             return View(donors);
         }
 
-        // ✅ Step 2: Handle Blood Request Form POST (from Modal)
+        // Handle Blood Request Form POST (from Modal)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RequestBlood(string DonorId, string Reason, string Location, string RequestorPhone)
@@ -87,7 +87,7 @@ namespace BloodConnect.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // Step 3: View My Sent Requests
+        // View My Sent Requests
         public async Task<IActionResult> MySentRequests()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -100,7 +100,7 @@ namespace BloodConnect.Controllers
             return View(myRequests);
         }
 
-        // Step 4: View Requests Received (For Donors)
+        // View Requests Received
         public async Task<IActionResult> MyReceivedRequests()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -113,7 +113,7 @@ namespace BloodConnect.Controllers
             return View(received);
         }
 
-        // Step 5: Donor Accepts Request
+        // Donor Accepts Request
         public async Task<IActionResult> Accept(int id)
         {
             var request = await _context.BloodRequests
@@ -139,7 +139,7 @@ namespace BloodConnect.Controllers
             return RedirectToAction(nameof(MyReceivedRequests));
         }
 
-        // Step 6: Donor Declines Request
+        // Donor Declines Request
         public async Task<IActionResult> Decline(int id)
         {
             var request = await _context.BloodRequests
@@ -164,7 +164,7 @@ namespace BloodConnect.Controllers
             return RedirectToAction(nameof(MyReceivedRequests));
         }
 
-        // Step 7: Requestor Marks as Completed
+        // Requestor Marks as Completed
         public async Task<IActionResult> MarkAsCompleted(int id)
         {
             var request = await _context.BloodRequests
@@ -192,6 +192,32 @@ namespace BloodConnect.Controllers
             }
 
             return RedirectToAction(nameof(MySentRequests));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSentNotificationCount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Json(0);
+
+            var count = await _context.BloodRequests
+                .Where(r => r.RequestorId == user.Id && r.Status == RequestStatus.Accepted)
+                .CountAsync();
+
+            return Json(count);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReceivedNotificationCount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Json(0);
+
+            var count = await _context.BloodRequests
+                .Where(r => r.DonorId == user.Id && r.Status == RequestStatus.Pending)
+                .CountAsync();
+
+            return Json(count);
         }
     }
 }

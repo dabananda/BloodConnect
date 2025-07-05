@@ -4,29 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BloodConnect</title>
-    <script type="importmap"></script>
+
+    <!-- CSS Libraries -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BloodConnect.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-
                 <!-- Brand -->
                 <a class="navbar-brand fw-bold text-danger" asp-area="" asp-controller="Home" asp-action="Index">Blood Connect</a>
 
-                <!-- Toggler for Mobile -->
+                <!-- Mobile Toggler -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <!-- Navbar Links -->
+                <!-- Nav Items -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto">
                         @if (User.Identity.IsAuthenticated)
@@ -34,13 +33,15 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="/">Home</a>
                             </li>
-                            <li class="nav-item">
-                                @* <a class="nav-link text-dark" href="/BloodRequest/MySentRequests">Sent Requests</a> *@
-                                @await Component.InvokeAsync("SentRequestNotification")
+                            <li class="nav-item position-relative">
+                                <a class="nav-link text-dark d-flex align-items-center" href="/BloodRequest/MySentRequests">
+                                    Sent Requests <span id="sentBadge" class="badge bg-danger ms-2 d-none">0</span>
+                                </a>
                             </li>
-                            <li class="nav-item">
-                                @* <a class="nav-link text-dark" href="/BloodRequest/MyReceivedRequests">Received Requests</a> *@
-                                @await Component.InvokeAsync("RequestNotification")
+                            <li class="nav-item position-relative">
+                                <a class="nav-link text-dark d-flex align-items-center" href="/BloodRequest/MyReceivedRequests">
+                                    Requests Received <span id="receivedBadge" class="badge bg-danger ms-2 d-none">0</span>
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="/Leaderboard/TopDonors">Leaderboard</a>
@@ -48,7 +49,6 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="/UserProfile/Index">Profile</a>
                             </li>
-
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
@@ -58,7 +58,7 @@
                         }
                     </ul>
 
-                    <!-- register/login -->
+                    <!-- Auth Links -->
                     <div class="d-flex ms-auto">
                         <partial name="_LoginPartial" />
                     </div>
@@ -66,6 +66,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -74,13 +75,39 @@
 
     <footer class="border-top footer text-muted text-wrap">
         <div class="container text-center">
-            &copy; 2025 BloodConnect - Made with ❤️ by <a href="https://fb.com/imdmitra/" target="_blank">Dabananda Mitra</a>
+            &copy; 2025 BloodConnect – Made with ❤️ by <a href="https://fb.com/imdmitra/" target="_blank">Dabananda Mitra</a>
         </div>
     </footer>
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+
+    <script>
+        function updateBadge(url, badgeId) {
+            fetch(url)
+                .then(res => res.json())
+                .then(count => {
+                    const badge = document.getElementById(badgeId);
+                    if (count > 0) {
+                        badge.textContent = count;
+                        badge.classList.remove('d-none');
+                    } else {
+                        badge.classList.add('d-none');
+                    }
+                });
+        }
+
+        // Initial badge updates and interval
+        updateBadge('/BloodRequest/GetSentNotificationCount', 'sentBadge');
+        updateBadge('/BloodRequest/GetReceivedNotificationCount', 'receivedBadge');
+
+        setInterval(() => {
+            updateBadge('/BloodRequest/GetSentNotificationCount', 'sentBadge');
+            updateBadge('/BloodRequest/GetReceivedNotificationCount', 'receivedBadge');
+        }, 10000);
+    </script>
 </body>
 </html>
