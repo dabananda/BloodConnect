@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/BloodConnect.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
 </head>
 <body>
     <header>
@@ -34,10 +35,12 @@
                                 <a class="nav-link text-dark" href="/">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/BloodRequest/MySentRequests">Sent Requests</a>
+                                @* <a class="nav-link text-dark" href="/BloodRequest/MySentRequests">Sent Requests</a> *@
+                                @await Component.InvokeAsync("SentRequestNotification")
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/BloodRequest/MyReceivedRequests">Received Requests</a>
+                                @* <a class="nav-link text-dark" href="/BloodRequest/MyReceivedRequests">Received Requests</a> *@
+                                @await Component.InvokeAsync("RequestNotification")
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="/Leaderboard/TopDonors">Leaderboard</a>
@@ -78,5 +81,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
 </body>
 </html>

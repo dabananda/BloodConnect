@@ -1,0 +1,12 @@
+﻿@model int
+
+<li class="nav-item position-relative">
+    <a class="nav-link text-dark d-flex align-items-center" href="/BloodRequest/MySentRequests">
+        Sent Requests
+
+        @if (Model > 0)
+        {
+            <span class="badge bg-danger ms-2">@Model</span>
+        }
+    </a>
+</li>
